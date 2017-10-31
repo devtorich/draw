@@ -37,8 +37,9 @@ canvas#canvas {
   height: 3px;
   position: absolute;
   border: 1px solid white;
-    top: 0;
-    left: 0;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
 }
 
 #slider-indicator {

@@ -75,7 +75,5 @@ ColorPicker(
       sliderCoordinate, pickerCoordinate
     );
 
-    a = hex
+    ctx.strokeStyle = hex
   });
-
-  console.log(a)
