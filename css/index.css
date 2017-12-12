@@ -8,7 +8,7 @@ body {
 }
 
 .main, .toolbox {
-  float:left;
+  float: left;
 }
 
 canvas#canvas {
@@ -19,4 +19,18 @@ canvas#canvas {
   width: auto;
   height: 100%;
   margin-left: 15px;
+}
+
+.tool {
+  padding: .5rem .8rem;
+  background: #50bdf5;
+  color: #fff;
+  text-align: center;
+  border-radius: .3rem;
+  cursor: pointer;
+  margin: 1.5rem 0;
+}
+
+.tool.active {
+  background: #1297db;
 }
