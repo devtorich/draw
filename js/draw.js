@@ -12,6 +12,12 @@ let drawX // 初始画鼠标按下的起始点
 let drawY
 var a
 
+var img = new Image();
+img.src = "./img/1.png"
+img.onload = () => {
+  ctx.drawImage(img, 0, 0)
+}
+
 c.addEventListener('touchstart', (e) => {
   e.preventDefault()
   d = true
@@ -30,7 +36,6 @@ c.addEventListener('touchend', (e) => {
 
 c.addEventListener('touchmove', (e) => {
   if (d) {
-    alert(123)
     ctx.lineTo(e.targetTouches[0].pageX - CclientRect.x, e.targetTouches[0].pageY - CclientRect.y)
     ctx.stroke()
   }
@@ -54,26 +59,8 @@ c.onmouseup = (e) => {
 c.onmousemove = (e) => {
   if (d) {
     ctx.lineTo(e.pageX - CclientRect.x, e.pageY - CclientRect.y)
+    ctx.lineWidth = 5
+    ctx.strokeStyle = '#fff'
     ctx.stroke()
   }
 }
-
-// 颜色选择器
-ColorPicker.fixIndicators(
-  document.getElementById('slider-indicator'),
-  document.getElementById('picker-indicator'));
-
-ColorPicker(
-  document.getElementById('slider'),
-  document.getElementById('picker'),
-
-  function(hex, hsv, rgb, pickerCoordinate, sliderCoordinate) {
-
-    ColorPicker.positionIndicators(
-      document.getElementById('slider-indicator'),
-      document.getElementById('picker-indicator'),
-      sliderCoordinate, pickerCoordinate
-    );
-
-    ctx.strokeStyle = hex
-  });
