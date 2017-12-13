@@ -86,19 +86,17 @@ function draw() {
 
     } else if ($('.square').hasClass('active')) {
       const len = circlePointArr.length
-
-      // 计算鼠标移动的距离
-      const a = triangle(
-        circlePointArr[len - 1].x - circlePointArr[0].x,
-        circlePointArr[len - 1].y - circlePointArr[0].y,
-      )
+      const beginX = circlePointArr[0].x
+      const beginY = circlePointArr[0].y
+      const squareW = circlePointArr[len - 1].x - beginX
+      const squareH = circlePointArr[len - 1].y - beginY
 
       ctx.beginPath()
-      ctx.moveTo(circlePointArr[0].x, circlePointArr[0].y)
-      ctx.lineTo(circlePointArr[0].x, circlePointArr[0].y + a)
-      ctx.lineTo(circlePointArr[0].x + a, circlePointArr[0].y + a)
-      ctx.lineTo(circlePointArr[0].x + a, circlePointArr[0].y)
-      ctx.lineTo(circlePointArr[0].x, circlePointArr[0].y)
+      ctx.moveTo(beginX - squareW, beginY - squareH)
+      ctx.lineTo(beginX - squareW, beginY + squareH)
+      ctx.lineTo(beginX + squareW, beginY + squareH)
+      ctx.lineTo(beginX + squareW, beginY - squareH)
+      ctx.lineTo(beginX - squareW, beginY - squareH)
       ctx.closePath()
       ctx.lineWidth = 5
       ctx.strokeStyle = color
@@ -120,9 +118,6 @@ function draw() {
     } else if ($('.eraser').hasClass('active')) {
       if (d) {
         ctx.clearRect(e.pageX - CclientRect.x, e.pageY - CclientRect.y, 20, 20)
-        ctx.lineWidth = 5
-        ctx.fillStyle = 'red'
-        ctx.stroke()
       }
     } else if ($('.circle').hasClass('active')) {
       if (d) {
@@ -164,6 +159,8 @@ function draw() {
         ctx.lineWidth = 1
         ctx.strokeStyle = 'transparent'
         ctx.stroke()
+
+        circlePointLatest()
       }
     } else if ($('.square').hasClass('active')) {
       if (d) {
@@ -172,24 +169,26 @@ function draw() {
           y: e.pageY,
         })
       }
-      const len = circlePointArr.length
 
-      // 计算鼠标移动的距离
-      const a = triangle(
-        circlePointArr[len - 1].x - circlePointArr[0].x,
-        circlePointArr[len - 1].y - circlePointArr[0].y,
-      )
+      const len = circlePointArr.length
+      const beginX = circlePointArr[0].x
+      const beginY = circlePointArr[0].y
+      const squareW = circlePointArr[len - 1].x - beginX
+      const squareH = circlePointArr[len - 1].y - beginY
 
       ctx.beginPath()
-      ctx.moveTo(circlePointArr[0].x, circlePointArr[0].y)
-      ctx.lineTo(circlePointArr[0].x, circlePointArr[0].y + a)
-      ctx.lineTo(circlePointArr[0].x + a, circlePointArr[0].y + a)
-      ctx.lineTo(circlePointArr[0].x + a, circlePointArr[0].y)
-      ctx.lineTo(circlePointArr[0].x, circlePointArr[0].y)
+      ctx.moveTo(beginX - squareW, beginY - squareH)
+      ctx.lineTo(beginX - squareW, beginY + squareH)
+      ctx.lineTo(beginX + squareW, beginY + squareH)
+      ctx.lineTo(beginX + squareW, beginY - squareH)
+      ctx.lineTo(beginX - squareW, beginY - squareH)
       ctx.closePath()
       ctx.lineWidth = 1
-      ctx.strokeStyle = 'rgba(255, 255, 255, .2)'
+      ctx.strokeStyle = color
       ctx.stroke()
+
+
+      ctx.clearRect(beginX - squareW, beginY - squareH, squareW * 2, squareH * 2)
     }
   }
 }
@@ -203,5 +202,22 @@ $('.tool').click(function() {
     draw()
   }
 })
+
+$('.restart').click(function () {
+  ctx.clearRect(0, 0, c.width, c.height)
+})
+
+function circlePointLatest() {
+  const len = circlePointArr.length
+  const beginX = circlePointArr[0].x
+  const beginY = circlePointArr[0].y
+  const r = triangle(
+    circlePointArr[len - 2].x - circlePointArr[0].x,
+    circlePointArr[len - 2].y - circlePointArr[0].y,
+  )
+  const latestPointX = circlePointArr[0].x + r
+
+  ctx.clearRect(beginX - r, beginY -r, r * 2, r * 2)
+}
 
 draw()

@@ -22,7 +22,7 @@ canvas#canvas {
   margin-left: 15px;
 }
 
-.tool {
+.tool, .restart {
   padding: .5rem .8rem;
   background: #50bdf5;
   color: #fff;
