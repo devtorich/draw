@@ -12,13 +12,6 @@ let drawX // 初始画鼠标按下的起始点
 let drawY
 
 let color = '#fff'
-//
-// let img = new Image()
-//
-// img.src = './img/1.png'
-// img.onload = () => {
-//   ctx.drawImage(img, 0, 0)
-// }
 
 let circlePointArr = []
 
@@ -82,6 +75,8 @@ function draw() {
       ctx.strokeStyle = color
       ctx.stroke()
 
+      circleAddLine(e)
+
       circlePointArr = []
 
     } else if ($('.square').hasClass('active')) {
@@ -101,6 +96,8 @@ function draw() {
       ctx.lineWidth = 5
       ctx.strokeStyle = color
       ctx.stroke()
+
+      squareAddLine(e)
 
       circlePointArr = []
 
@@ -193,6 +190,7 @@ $('.tool').click(function() {
 })
 
 $('.restart').click(function () {
+  d = false
   ctx.clearRect(0, 0, c.width, c.height)
 })
 
@@ -201,6 +199,75 @@ function clearCircle (x,y,r) {
 		let angle = (i / Math.round(Math.PI * r)) * 360;
 		ctx.clearRect(x, y, Math.sin(angle * (Math.PI / 180)) * r , Math.cos(angle * (Math.PI / 180)) * r);
 	}
+}
+
+function circleAddLine(e) {
+  let beginX = circlePointArr[0].x
+  let beginY = circlePointArr[0].y
+  let r = triangle(
+    e.pageX - beginX,
+    e.pageY - beginY
+  )
+
+  if (beginX + r + 150 > c.width) {
+    ctx.beginPath()
+    ctx.moveTo(beginX - r, beginY)
+    ctx.lineTo(beginX - r - 50, beginY + 50)
+    ctx.lineTo(beginX - r - 150, beginY + 50)
+    ctx.strokeStyle = color
+    ctx.stroke()
+  } else if (beginY + 50 > c.height) {
+    ctx.beginPath()
+    ctx.moveTo(beginX + r, beginY)
+    ctx.lineTo(beginX + r + 50, beginY - 50)
+    ctx.lineTo(beginX + r + 150, beginY - 50)
+    ctx.strokeStyle = color
+    ctx.stroke()
+  } else {
+    ctx.beginPath()
+    ctx.moveTo(beginX + r, beginY)
+    ctx.lineTo(beginX + r + 50, beginY + 50)
+    ctx.lineTo(beginX + r + 150, beginY + 50)
+    ctx.strokeStyle = color
+    ctx.stroke()
+  }
+}
+
+function squareAddLine(e) {
+  let w = e.pageX - circlePointArr[0].x
+  let h = e.pageY - circlePointArr[0].y
+
+
+  if (e.pageX + 50 > c.width) {
+    ctx.beginPath()
+    ctx.moveTo(e.pageX - w * 2, e.pageY)
+    ctx.lineTo(e.pageX - w - 50, e.pageY + 50)
+    ctx.lineTo(e.pageX - w - 150, e.pageY + 50)
+    ctx.strokeStyle = color
+    ctx.stroke()
+  } else if (e.pageY + 50 > c.height) {
+    ctx.beginPath()
+    ctx.moveTo(e.pageX, e.pageY - h * 2)
+    ctx.lineTo(e.pageX + 50, e.pageY - h * 2 - 50)
+    ctx.lineTo(e.pageX + 150, e.pageY - h * 2 - 50)
+    ctx.strokeStyle = color
+    ctx.stroke()
+  } else {
+    ctx.beginPath()
+    ctx.moveTo(e.pageX, e.pageY)
+    ctx.lineTo(e.pageX + 50, e.pageY + 50)
+    ctx.lineTo(e.pageX + 150, e.pageY + 50)
+    ctx.strokeStyle = color
+    ctx.stroke()
+  }
+}
+
+window.onmousemove = (e) => {
+  if (e.pageX > c.width && e.pageY > c.height) {
+    d = false
+
+    return false
+  }
 }
 
 draw()

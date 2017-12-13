@@ -17,7 +17,7 @@ canvas#canvas {
 }
 
 .toolbox {
-  width: auto;
+  width: 4rem;
   height: 100%;
   margin-left: 15px;
 }
@@ -34,4 +34,21 @@ canvas#canvas {
 
 .tool.active {
   background: #1297db;
+}
+
+.notice {
+  overflow: hidden;
+}
+
+.notice li {
+  padding: .5rem 0;
+  line-height: 2rem;
+  border-top: 1px solid #f3f3f3;
+}
+
+.notice b {
+  padding: .2rem .4rem;
+  background: #ccc;
+  color: #ec8484;
+  border-radius: .1rem;
 }
