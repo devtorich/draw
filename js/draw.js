@@ -144,23 +144,10 @@ function draw() {
         ctx.strokeStyle = 'rgba(255, 255, 255, 1)'
         ctx.stroke()
 
-        ctx.beginPath()
-        ctx.arc(
-          circlePointArr[0].x,
-          circlePointArr[0].y,
-          triangle(
-            circlePointArr[len - 2].x - circlePointArr[0].x,
-            circlePointArr[len - 2].y - circlePointArr[0].y,
-          ),
-          0,
-          Math.PI * 2,
-          true)
-        ctx.closePath()
-        ctx.lineWidth = 1
-        ctx.strokeStyle = 'transparent'
-        ctx.stroke()
-
-        circlePointLatest()
+        clearCircle(circlePointArr[0].x, circlePointArr[0].y, triangle(
+          circlePointArr[len - 2].x - circlePointArr[0].x,
+          circlePointArr[len - 2].y - circlePointArr[0].y,
+        ))
       }
     } else if ($('.square').hasClass('active')) {
       if (d) {
@@ -218,6 +205,14 @@ function circlePointLatest() {
   const latestPointX = circlePointArr[0].x + r
 
   ctx.clearRect(beginX - r, beginY -r, r * 2, r * 2)
+
+}
+
+function clearCircle (x,y,r) {
+	for (let i=0; i< Math.round(Math.PI * r); i++){
+		let angle = (i / Math.round(Math.PI * r)) * 360;
+		ctx.clearRect(x, y, Math.sin(angle * (Math.PI / 180)) * r , Math.cos(angle * (Math.PI / 180)) * r);
+	}
 }
 
 draw()
