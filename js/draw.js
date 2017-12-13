@@ -69,7 +69,7 @@ function draw() {
         ),
         0,
         Math.PI * 2,
-        true) // 绘制
+        true)
       ctx.closePath()
       ctx.lineWidth = 5
       ctx.strokeStyle = color
@@ -263,7 +263,7 @@ function squareAddLine(e) {
 }
 
 window.onmousemove = (e) => {
-  if (e.pageX > c.width && e.pageY > c.height) {
+  if (e.pageX > c.width || e.pageX < 0 || e.pageY > c.height || e.pageY < 0) {
     d = false
 
     return false
