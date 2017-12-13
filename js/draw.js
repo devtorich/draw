@@ -12,13 +12,13 @@ let drawX // 初始画鼠标按下的起始点
 let drawY
 
 let color = '#fff'
-
-let img = new Image()
-
-img.src = './img/1.png'
-img.onload = () => {
-  ctx.drawImage(img, 0, 0)
-}
+//
+// let img = new Image()
+//
+// img.src = './img/1.png'
+// img.onload = () => {
+//   ctx.drawImage(img, 0, 0)
+// }
 
 let circlePointArr = []
 
@@ -37,21 +37,19 @@ function draw() {
 
       ctx.beginPath()
       ctx.moveTo(drawX, drawY)
+    } else if ($('.eraser').hasClass('active')) {
+      d = true
+
+      drawX = e.pageX - CclientRect.x
+      drawY = e.pageY - CclientRect.y
+
+      ctx.beginPath()
+      ctx.moveTo(drawX, drawY)
     } else if ($('.circle').hasClass('active')) {
       d = true
 
       circlePointArr = []
     } else if ($('.square').hasClass('active')) {
-      // ctx.beginPath()
-      // ctx.moveTo(100, 100)
-      // ctx.lineTo(100, 200)
-      // ctx.lineTo(200, 200)
-      // ctx.lineTo(200, 100)
-      // ctx.lineTo(100, 100)
-      // ctx.lineWidth = 5
-      // ctx.strokeStyle = color
-      // ctx.stroke()
-      // ctx.closePath()
       d = true
 
       circlePointArr = []
@@ -59,11 +57,13 @@ function draw() {
   }
 
   c.onmouseup = (e) => {
+    d = false
+
     if ($('.pen').hasClass('active')) {
-      d = false
+      ctx.closePath()
+    } else if ($('.eraser').hasClass('active')) {
       ctx.closePath()
     } else if ($('.circle').hasClass('active')) {
-      d = false
       const len = circlePointArr.length
 
       ctx.beginPath()
@@ -77,11 +77,14 @@ function draw() {
         0,
         Math.PI * 2,
         true) // 绘制
+      ctx.closePath()
       ctx.lineWidth = 5
       ctx.strokeStyle = color
       ctx.stroke()
+
+      circlePointArr = []
+
     } else if ($('.square').hasClass('active')) {
-      d = false
       const len = circlePointArr.length
 
       // 计算鼠标移动的距离
@@ -96,9 +99,13 @@ function draw() {
       ctx.lineTo(circlePointArr[0].x + a, circlePointArr[0].y + a)
       ctx.lineTo(circlePointArr[0].x + a, circlePointArr[0].y)
       ctx.lineTo(circlePointArr[0].x, circlePointArr[0].y)
+      ctx.closePath()
       ctx.lineWidth = 5
       ctx.strokeStyle = color
       ctx.stroke()
+
+      circlePointArr = []
+
     }
   }
 
@@ -110,41 +117,53 @@ function draw() {
         ctx.strokeStyle = color
         ctx.stroke()
       }
+    } else if ($('.eraser').hasClass('active')) {
+      if (d) {
+        ctx.clearRect(e.pageX - CclientRect.x, e.pageY - CclientRect.y, 20, 20)
+        ctx.lineWidth = 5
+        ctx.fillStyle = 'red'
+        ctx.stroke()
+      }
     } else if ($('.circle').hasClass('active')) {
       if (d) {
         circlePointArr.push({
           x: e.pageX,
           y: e.pageY,
         })
-        // const len = circlePointArr.length
-        //
-        // ctx.beginPath()
-        // ctx.arc(
-        //   circlePointArr[0].x,
-        //   circlePointArr[0].y,
-        //   triangle(
-        //     circlePointArr[len - 2].x - circlePointArr[0].x,
-        //     circlePointArr[len - 2].y - circlePointArr[0].y,
-        //   ),
-        //   0,
-        //   Math.PI * 2,
-        //   true) // 绘制
-        // ctx.lineWidth = 1
-        // ctx.strokeStyle = 'transparent'
-        //
-        // ctx.arc(
-        //   circlePointArr[0].x,
-        //   circlePointArr[0].y,
-        //   triangle(
-        //     circlePointArr[len - 1].x - circlePointArr[0].x,
-        //     circlePointArr[len - 1].y - circlePointArr[0].y,
-        //   ),
-        //   0,
-        //   Math.PI * 2,
-        //   true) // 绘制
-        // ctx.lineWidth = 1
-        // ctx.strokeStyle = color
-        // ctx.stroke()
+
+        const len = circlePointArr.length
+
+        ctx.beginPath()
+        ctx.arc(
+          circlePointArr[0].x,
+          circlePointArr[0].y,
+          triangle(
+            circlePointArr[len - 1].x - circlePointArr[0].x,
+            circlePointArr[len - 1].y - circlePointArr[0].y,
+          ),
+          0,
+          Math.PI * 2,
+          true)
+        ctx.closePath()
+        ctx.lineWidth = 1
+        ctx.strokeStyle = 'rgba(255, 255, 255, 1)'
+        ctx.stroke()
+
+        ctx.beginPath()
+        ctx.arc(
+          circlePointArr[0].x,
+          circlePointArr[0].y,
+          triangle(
+            circlePointArr[len - 2].x - circlePointArr[0].x,
+            circlePointArr[len - 2].y - circlePointArr[0].y,
+          ),
+          0,
+          Math.PI * 2,
+          true)
+        ctx.closePath()
+        ctx.lineWidth = 1
+        ctx.strokeStyle = 'transparent'
+        ctx.stroke()
       }
     } else if ($('.square').hasClass('active')) {
       if (d) {
@@ -153,45 +172,26 @@ function draw() {
           y: e.pageY,
         })
       }
-    }
-  }
-}
+      const len = circlePointArr.length
 
-function penDraw() {
-  c.onmousedown = (e) => {
-    d = true
+      // 计算鼠标移动的距离
+      const a = triangle(
+        circlePointArr[len - 1].x - circlePointArr[0].x,
+        circlePointArr[len - 1].y - circlePointArr[0].y,
+      )
 
-    drawX = e.pageX - CclientRect.x
-    drawY = e.pageY - CclientRect.y
-
-    ctx.beginPath()
-    ctx.moveTo(drawX, drawY)
-  }
-
-  c.onmouseup = (e) => {
-    d = false
-    ctx.closePath()
-  }
-
-  c.onmousemove = (e) => {
-    if (d) {
-      ctx.lineTo(e.pageX - CclientRect.x, e.pageY - CclientRect.y)
-      ctx.lineWidth = 5
-      ctx.strokeStyle = '#fff'
+      ctx.beginPath()
+      ctx.moveTo(circlePointArr[0].x, circlePointArr[0].y)
+      ctx.lineTo(circlePointArr[0].x, circlePointArr[0].y + a)
+      ctx.lineTo(circlePointArr[0].x + a, circlePointArr[0].y + a)
+      ctx.lineTo(circlePointArr[0].x + a, circlePointArr[0].y)
+      ctx.lineTo(circlePointArr[0].x, circlePointArr[0].y)
+      ctx.closePath()
+      ctx.lineWidth = 1
+      ctx.strokeStyle = 'rgba(255, 255, 255, .2)'
       ctx.stroke()
     }
   }
-}
-
-function circleDraw() {
-  ctx.beginPath();
-  ctx.arc(75, 75, 50, 0, Math.PI * 2, true); // 绘制
-  ctx.strokeStyle = '#fff'
-  ctx.stroke();
-}
-
-function squareDraw() {
-  console.log(2)
 }
 
 $('.tool').click(function() {

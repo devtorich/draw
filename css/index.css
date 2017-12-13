@@ -12,7 +12,8 @@ body {
 }
 
 canvas#canvas {
-  background: #f3f3f3;
+  background: #fff url(../img/1.png);
+  background-size: cover;
 }
 
 .toolbox {
