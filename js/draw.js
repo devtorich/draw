@@ -144,10 +144,12 @@ function draw() {
         ctx.strokeStyle = 'rgba(255, 255, 255, 1)'
         ctx.stroke()
 
-        clearCircle(circlePointArr[0].x, circlePointArr[0].y, triangle(
-          circlePointArr[len - 2].x - circlePointArr[0].x,
-          circlePointArr[len - 2].y - circlePointArr[0].y,
-        ))
+        if (len>1) {
+          clearCircle(circlePointArr[0].x, circlePointArr[0].y, triangle(
+            circlePointArr[len - 2].x - circlePointArr[0].x,
+            circlePointArr[len - 2].y - circlePointArr[0].y,
+          ))
+        }
       }
     } else if ($('.square').hasClass('active')) {
       if (d) {
