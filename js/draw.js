@@ -8,7 +8,6 @@ c.width = w - 80 // 设置宽高
 c.height = h
 let d = false // 初始化鼠标按下事件 初始时为false
 let lIndex = 0  // 计算直线情况下的点击数
-let tIndex = 0  // 计算批注输入框的索引
 let drawX // 初始画鼠标按下的起始点
 let drawY
 
@@ -34,28 +33,25 @@ function draw() {
     } else if ($('.note').hasClass('active')) {
       d = true
 
-      drawX = e.pageX - CclientRect.x
-      drawY = e.pageY - CclientRect.y
+      if (d) {
+        drawX = e.pageX - CclientRect.x
+        drawY = e.pageY - CclientRect.y
 
-      tIndex++
+        const noteBox = '<div class="note-box" style="left:'+ drawX +'px;top:'+ drawY +'px;"><textarea fcon="true" rows="6" cols="25"></textarea></div>'
 
-      const noteBox = '<div class="note-box" style="left:'+ drawX +'px;top:'+ drawY +'px;"><textarea fcon="true" tIndex="'+ tIndex +'" rows="6" cols="25"></textarea></div>'
+        $('body').append(noteBox)
 
-      $('body').append(noteBox)
+        const txtarea = document.querySelector('.note-box').querySelector('textarea')
 
-      const txtarea = document.querySelector('.note-box').querySelector('textarea')
+        txtarea.focus()
 
-      txtarea.focus()
-
-      txtarea.onfocus = function () {
-        this.setAttribute('fcon', 'true')
+        txtarea.onfocus = function () {
+          this.setAttribute('fcon', 'true')
+        }
+        txtarea.onblur = function () {
+          this.setAttribute('fcon', 'false')
+        }
       }
-      txtarea.onblur = function () {
-        this.setAttribute('fcon', 'false')
-      }
-      // document.querySelector('.note-box textarea').querySelector('textarea').focus()
-      //
-      // log(document.querySelector('.note-box').focus())
     } else if ($('.line').hasClass('active')) {
       lIndex++
       d = true
@@ -336,7 +332,7 @@ window.onmousemove = (e) => {
 document.onkeydown = (e) => {
   if(e.keyCode == 13 && e.ctrlKey) {
     if (e.target.value.trim() && e.target.getAttribute('fcon')==='true') {
-      log(e.target.value.trim())
+      e.target.setAttribute('readonly', 'readonly')
     }
   }
 }
