@@ -6,8 +6,8 @@ const CclientRect = c.getBoundingClientRect() // 获取canvas的各种坐标值
 let ctx = c.getContext('2d') // 实例化一个2dcanvas
 c.width = w - 80 // 设置宽高
 c.height = h
-
 let d = false // 初始化鼠标按下事件 初始时为false
+let lIndex = 0  // 计算直线情况下的点击数
 let drawX // 初始画鼠标按下的起始点
 let drawY
 
@@ -30,6 +30,40 @@ function draw() {
 
       ctx.beginPath()
       ctx.moveTo(drawX, drawY)
+    } else if ($('.note').hasClass('active')) {
+      d = true
+
+      drawX = e.pageX - CclientRect.x
+      drawY = e.pageY - CclientRect.y
+
+      const noteBox = '<div class="note-box" style="left:'+ drawX +'px;top:'+ drawY +'px;"><textarea name="name" rows="6" cols="25"></textarea></div>'
+
+      $('body').append(noteBox)
+      document.querySelector('.note-box textarea').focus()
+    } else if ($('.line').hasClass('active')) {
+      lIndex++
+      d = true
+
+      if (lIndex == 1) {
+        drawX = e.pageX - CclientRect.x
+        drawY = e.pageY - CclientRect.y
+
+        ctx.beginPath()
+        ctx.moveTo(drawX, drawY)
+      } else if (lIndex == 2) {
+        drawX = e.pageX - CclientRect.x
+        drawY = e.pageY - CclientRect.y
+
+        log(lIndex)
+        ctx.lineTo(drawX, drawY)
+        ctx.closePath()
+        ctx.lineWidth = 5
+        ctx.strokeStyle = color
+        ctx.stroke()
+
+        d = false
+        lIndex = 0
+      }
     } else if ($('.eraser').hasClass('active')) {
       d = true
 
@@ -54,28 +88,30 @@ function draw() {
 
     if ($('.pen').hasClass('active')) {
       ctx.closePath()
-    } else if ($('.eraser').hasClass('active')) {
+    }else if ($('.eraser').hasClass('active')) {
       ctx.closePath()
     } else if ($('.circle').hasClass('active')) {
       const len = circlePointArr.length
 
-      ctx.beginPath()
-      ctx.arc(
-        circlePointArr[0].x,
-        circlePointArr[0].y,
-        triangle(
-          circlePointArr[len - 1].x - circlePointArr[0].x,
-          circlePointArr[len - 1].y - circlePointArr[0].y,
-        ),
-        0,
-        Math.PI * 2,
-        true)
-      ctx.closePath()
-      ctx.lineWidth = 5
-      ctx.strokeStyle = color
-      ctx.stroke()
+      if (len > 0) {
+        ctx.beginPath()
+        ctx.arc(
+          circlePointArr[0].x,
+          circlePointArr[0].y,
+          triangle(
+            circlePointArr[len - 1].x - circlePointArr[0].x,
+            circlePointArr[len - 1].y - circlePointArr[0].y,
+          ),
+          0,
+          Math.PI * 2,
+          true)
+        ctx.closePath()
+        ctx.lineWidth = 5
+        ctx.strokeStyle = color
+        ctx.stroke()
+      }
 
-      circleAddLine(e)
+      // circleAddLine(e)
 
       circlePointArr = []
 
@@ -97,7 +133,7 @@ function draw() {
       ctx.strokeStyle = color
       ctx.stroke()
 
-      squareAddLine(e)
+      // squareAddLine(e)
 
       circlePointArr = []
 
@@ -112,7 +148,7 @@ function draw() {
         ctx.strokeStyle = color
         ctx.stroke()
       }
-    } else if ($('.eraser').hasClass('active')) {
+    }else if ($('.eraser').hasClass('active')) {
       if (d) {
         ctx.clearRect(e.pageX - CclientRect.x, e.pageY - CclientRect.y, 20, 20)
       }
@@ -172,7 +208,6 @@ function draw() {
         ctx.strokeStyle = color
         ctx.stroke()
 
-
         ctx.clearRect(beginX - squareW, beginY - squareH, squareW * 2, squareH * 2)
       }
     }
@@ -231,6 +266,18 @@ function circleAddLine(e) {
     ctx.strokeStyle = color
     ctx.stroke()
   }
+
+  // log(e)
+  // ctx.beginPath()
+  // ctx.moveTo(e.pageX, e.pageY)
+  // ctx.lineTo(e.pageX + 200, e.pageY + 30)
+  // ctx.strokeStyle = color
+  // ctx.stroke()
+  //
+  // c.onmousedown = (e) => {
+  //   // d = false
+  //   console.log(d)
+  // }
 }
 
 function squareAddLine(e) {

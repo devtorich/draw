@@ -4,6 +4,7 @@
 }
 
 body {
+  position: relative;
   overflow: hidden;
 }
 
@@ -23,8 +24,10 @@ canvas#canvas {
 }
 
 .tool, .restart {
-  padding: .5rem .8rem;
-  background: #50bdf5;
+  width: 4rem;
+  height: 2rem;
+  line-height: 2rem;
+  background: #6fceff;
   color: #fff;
   text-align: center;
   border-radius: .3rem;
@@ -33,7 +36,7 @@ canvas#canvas {
 }
 
 .tool.active {
-  background: #1297db;
+  background: #00a9ff;
 }
 
 .notice {
@@ -51,4 +54,20 @@ canvas#canvas {
   background: #ccc;
   color: #ec8484;
   border-radius: .1rem;
+}
+
+.note-box {
+  position: absolute;
+  z-index: 9;
+  width: auto;
+  height: auto;
+}
+
+.note-box textarea {
+  resize: none;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
 }
