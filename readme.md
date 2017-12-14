@@ -18,4 +18,4 @@ cd draw
 
 ### 技术栈
 
-`Canvas` `ES6` `CSS3`
+`Canvas` `jQuery` `ES6` `CSS3`

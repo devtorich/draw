@@ -7,7 +7,7 @@ let ctx = c.getContext('2d') // 实例化一个2dcanvas
 c.width = w - 80 // 设置宽高
 c.height = h
 let d = false // 初始化鼠标按下事件 初始时为false
-let lIndex = 0  // 计算直线情况下的点击数
+let lIndex = 0 // 计算直线情况下的点击数
 let drawX // 初始画鼠标按下的起始点
 let drawY
 
@@ -37,7 +37,7 @@ function draw() {
         drawX = e.pageX - CclientRect.x
         drawY = e.pageY - CclientRect.y
 
-        const noteBox = '<div class="note-box" style="left:'+ drawX +'px;top:'+ drawY +'px;"><textarea fcon="true" rows="6" cols="25"></textarea></div>'
+        const noteBox = '<div class="note-box" style="left:' + drawX + 'px;top:' + drawY + 'px;"><textarea fcon="true" rows="6" cols="25"></textarea></div>'
 
         $('body').append(noteBox)
 
@@ -45,10 +45,10 @@ function draw() {
 
         txtarea.focus()
 
-        txtarea.onfocus = function () {
+        txtarea.onfocus = function() {
           this.setAttribute('fcon', 'true')
         }
-        txtarea.onblur = function () {
+        txtarea.onblur = function() {
           this.setAttribute('fcon', 'false')
         }
       }
@@ -100,7 +100,7 @@ function draw() {
 
     if ($('.pen').hasClass('active')) {
       ctx.closePath()
-    }else if ($('.eraser').hasClass('active')) {
+    } else if ($('.eraser').hasClass('active')) {
       ctx.closePath()
     } else if ($('.circle').hasClass('active')) {
       const len = circlePointArr.length
@@ -160,7 +160,7 @@ function draw() {
         ctx.strokeStyle = color
         ctx.stroke()
       }
-    }else if ($('.eraser').hasClass('active')) {
+    } else if ($('.eraser').hasClass('active')) {
       if (d) {
         ctx.clearRect(e.pageX - CclientRect.x, e.pageY - CclientRect.y, 20, 20)
       }
@@ -236,16 +236,17 @@ $('.tool').click(function() {
   }
 })
 
-$('.restart').click(function () {
+$('.restart').click(function() {
   d = false
   ctx.clearRect(0, 0, c.width, c.height)
+  $('.note-box').remove()
 })
 
-function clearCircle (x,y,r) {
-	for (let i=0; i< Math.round(Math.PI * r); i++){
-		let angle = (i / Math.round(Math.PI * r)) * 360;
-		ctx.clearRect(x, y, Math.sin(angle * (Math.PI / 180)) * r , Math.cos(angle * (Math.PI / 180)) * r);
-	}
+function clearCircle(x, y, r) {
+  for (let i = 0; i < Math.round(Math.PI * r); i++) {
+    let angle = (i / Math.round(Math.PI * r)) * 360;
+    ctx.clearRect(x, y, Math.sin(angle * (Math.PI / 180)) * r, Math.cos(angle * (Math.PI / 180)) * r);
+  }
 }
 
 function circleAddLine(e) {
@@ -330,8 +331,8 @@ window.onmousemove = (e) => {
 }
 
 document.onkeydown = (e) => {
-  if(e.keyCode == 13 && e.ctrlKey) {
-    if (e.target.value.trim() && e.target.getAttribute('fcon')==='true') {
+  if (e.keyCode == 13 && e.ctrlKey) {
+    if (e.target.value.trim() && e.target.getAttribute('fcon') === 'true') {
       e.target.setAttribute('readonly', 'readonly')
     }
   }
