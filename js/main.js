@@ -1,7 +1,7 @@
 const log = console.log.bind(console)
 
 let d = false // 初始化鼠标按下事件
-let offX, offY
+let offX, offY, moveX = 437, moveY = 293, edW, edH
 let movePoint = []
 let resizePoint = []
 
@@ -65,8 +65,8 @@ editArea.onmousedown = (e) => {
 
 editArea.onmousemove = (e) => {
   if (d) {
-    let moveX = e.pageX - offX - mainLeft
-    let moveY = e.pageY - offY - mainTop
+    moveX = e.pageX - offX - mainLeft
+    moveY = e.pageY - offY - mainTop
 
     edit.style.transform = 'translate('+ moveX +'px, '+ moveY +'px)'
   }
@@ -79,6 +79,8 @@ editArea.onmouseup = (e) => {
 for (let i = 0; i < resizePoint.length; i++) {
   resizePoint[i].onmousedown = (e) => {
     d = true
+    edW = parseInt(edit.style.width)
+    edH = parseInt(edit.style.height)
   }
   resizePoint[i].onmousemove = (e) => {
     if (d) {
@@ -95,17 +97,68 @@ for (let i = 0; i < resizePoint.length; i++) {
         y: e.pageY
       })
 
-      if (r && movePoint.length > 1) {
-        edit.style.width = (parseInt(edit.style.width) + (movePoint[movePoint.length - 1].x - movePoint[movePoint.length - 2].x)) + 'px'
-      }
+      if (movePoint.length > 1) {
+        let moveTX = movePoint[movePoint.length - 1].x - movePoint[movePoint.length - 2].x
+        let moveTY = movePoint[movePoint.length - 1].y - movePoint[movePoint.length - 2].y
+        let mouseOffLeft = e.pageX - mainLeft
+        let mouseOffTop = e.pageY - mainTop
 
-      if (l && movePoint.length > 1) {
-        edit.style.width = (parseInt(edit.style.width) + (movePoint[movePoint.length - 2].x - movePoint[movePoint.length - 1].x)) + 'px'
+        if (r) {
+          edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
+        }
+
+        if (l) {
+          edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
+          edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
+        }
+
+        if (t) {
+          edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
+          edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
+        }
+
+        if (b) {
+          edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
+        }
+
+        if (tr) {
+          edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
+          edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
+          edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
+        }
+
+        if (tl) {
+          edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
+          edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
+          edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
+          edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
+        }
+
+        if (br) {
+          edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
+          edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
+        }
+
+        if (bl) {
+          edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
+          edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
+          edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
+        }
       }
     }
   }
   resizePoint[i].onmouseup = (e) => {
     d = false
     movePoint = []
+
+    offX = e.offsetX
+    offY = e.offsetY
+
+    edW = parseInt(edit.style.width)
+    edH = parseInt(edit.style.height)
+
+    // moveX = e.pageX - offX - mainLeft
+    // moveY = e.pageY - offY - mainTop
+    // log(moveX)
   }
 }
