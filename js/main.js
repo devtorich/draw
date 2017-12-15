@@ -58,22 +58,22 @@ for (var i = 0; i < editDir.length; i++) {
 // log(window.getComputedStyle(editArea, '::before'))
 
 editArea.onmousedown = (e) => {
-  d = true
-  offX = e.offsetX
-  offY = e.offsetY
-}
+    d = true
+    offX = e.offsetX
+    offY = e.offsetY
 
-editArea.onmousemove = (e) => {
-  if (d) {
-    moveX = e.pageX - offX - mainLeft
-    moveY = e.pageY - offY - mainTop
+  editArea.onmousemove = (e) => {
+    if (d) {
+      moveX = e.pageX - offX - mainLeft
+      moveY = e.pageY - offY - mainTop
 
-    edit.style.transform = 'translate('+ moveX +'px, '+ moveY +'px)'
+      edit.style.transform = 'translate('+ moveX +'px, '+ moveY +'px)'
+    }
   }
-}
 
-editArea.onmouseup = (e) => {
-  d = false
+  editArea.onmouseup = (e) => {
+    d = false
+  }
 }
 
 for (let i = 0; i < resizePoint.length; i++) {
