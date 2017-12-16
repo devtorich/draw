@@ -58,11 +58,11 @@ for (var i = 0; i < editDir.length; i++) {
 // log(window.getComputedStyle(editArea, '::before'))
 
 editArea.onmousedown = (e) => {
-    d = true
-    offX = e.offsetX
-    offY = e.offsetY
+  d = true
+  offX = e.offsetX
+  offY = e.offsetY
 
-  editArea.onmousemove = (e) => {
+  document.onmousemove = (e) => {
     if (d) {
       moveX = e.pageX - offX - mainLeft
       moveY = e.pageY - offY - mainTop
@@ -71,7 +71,7 @@ editArea.onmousedown = (e) => {
     }
   }
 
-  editArea.onmouseup = (e) => {
+  document.onmouseup = (e) => {
     d = false
   }
 }
@@ -81,84 +81,88 @@ for (let i = 0; i < resizePoint.length; i++) {
     d = true
     edW = parseInt(edit.style.width)
     edH = parseInt(edit.style.height)
-  }
-  resizePoint[i].onmousemove = (e) => {
-    if (d) {
-      const tr = e.target.getAttribute('edit-dir') === 'tr'
-      const br = e.target.getAttribute('edit-dir') === 'br'
-      const tl = e.target.getAttribute('edit-dir') === 'tl'
-      const bl = e.target.getAttribute('edit-dir') === 'bl'
-      const t = e.target.getAttribute('edit-dir') === 't'
-      const b = e.target.getAttribute('edit-dir') === 'b'
-      const l = e.target.getAttribute('edit-dir') === 'l'
-      const r = e.target.getAttribute('edit-dir') === 'r'
-      movePoint.push({
-        x: e.pageX,
-        y: e.pageY
-      })
 
-      if (movePoint.length > 1) {
-        let moveTX = movePoint[movePoint.length - 1].x - movePoint[movePoint.length - 2].x
-        let moveTY = movePoint[movePoint.length - 1].y - movePoint[movePoint.length - 2].y
-        let mouseOffLeft = e.pageX - mainLeft
-        let mouseOffTop = e.pageY - mainTop
+    document.onmousemove = (e) => {
+      if (d) {
 
-        if (r) {
-          edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
-        }
+        log(resizePoint[i])
 
-        if (l) {
-          edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
-          edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
-        }
+        const tr = e.target.getAttribute('edit-dir') === 'tr'
+        const br = e.target.getAttribute('edit-dir') === 'br'
+        const tl = e.target.getAttribute('edit-dir') === 'tl'
+        const bl = e.target.getAttribute('edit-dir') === 'bl'
+        const t = e.target.getAttribute('edit-dir') === 't'
+        const b = e.target.getAttribute('edit-dir') === 'b'
+        const l = e.target.getAttribute('edit-dir') === 'l'
+        const r = e.target.getAttribute('edit-dir') === 'r'
+        movePoint.push({
+          x: e.pageX,
+          y: e.pageY
+        })
 
-        if (t) {
-          edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
-          edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
-        }
+        if (movePoint.length > 1) {
+          let moveTX = movePoint[movePoint.length - 1].x - movePoint[movePoint.length - 2].x
+          let moveTY = movePoint[movePoint.length - 1].y - movePoint[movePoint.length - 2].y
+          let mouseOffLeft = e.pageX - mainLeft
+          let mouseOffTop = e.pageY - mainTop
 
-        if (b) {
-          edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
-        }
+          if (r) {
+            edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
+          }
 
-        if (tr) {
-          edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
-          edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
-          edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
-        }
+          if (l) {
+            edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
+            edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
+          }
 
-        if (tl) {
-          edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
-          edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
-          edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
-          edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
-        }
+          if (t) {
+            edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
+            edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
+          }
 
-        if (br) {
-          edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
-          edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
-        }
+          if (b) {
+            edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
+          }
 
-        if (bl) {
-          edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
-          edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
-          edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
+          if (tr) {
+            edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
+            edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
+            edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
+          }
+
+          if (tl) {
+            edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
+            edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
+            edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
+            edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
+          }
+
+          if (br) {
+            edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
+            edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
+          }
+
+          if (bl) {
+            edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
+            edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
+            edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
+          }
         }
       }
     }
-  }
-  resizePoint[i].onmouseup = (e) => {
-    d = false
-    movePoint = []
+    document.onmouseup = (e) => {
+      d = false
+      movePoint = []
 
-    offX = e.offsetX
-    offY = e.offsetY
+      offX = e.offsetX
+      offY = e.offsetY
 
-    edW = parseInt(edit.style.width)
-    edH = parseInt(edit.style.height)
+      edW = parseInt(edit.style.width)
+      edH = parseInt(edit.style.height)
 
-    // moveX = e.pageX - offX - mainLeft
-    // moveY = e.pageY - offY - mainTop
-    // log(moveX)
+      // moveX = e.pageX - offX - mainLeft
+      // moveY = e.pageY - offY - mainTop
+      // log(moveX)
+    }
   }
 }
