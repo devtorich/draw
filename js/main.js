@@ -55,8 +55,6 @@ for (var i = 0; i < editDir.length; i++) {
   resizePoint.push(editResize)
 }
 
-// log(window.getComputedStyle(editArea, '::before'))
-
 editArea.onmousedown = (e) => {
   d = true
   offX = e.offsetX
@@ -82,87 +80,116 @@ for (let i = 0; i < resizePoint.length; i++) {
     edW = parseInt(edit.style.width)
     edH = parseInt(edit.style.height)
 
-    document.onmousemove = (e) => {
+    const tr = e.target.getAttribute('edit-dir') === 'tr'
+    const br = e.target.getAttribute('edit-dir') === 'br'
+    const tl = e.target.getAttribute('edit-dir') === 'tl'
+    const bl = e.target.getAttribute('edit-dir') === 'bl'
+    const t = e.target.getAttribute('edit-dir') === 't'
+    const b = e.target.getAttribute('edit-dir') === 'b'
+    const l = e.target.getAttribute('edit-dir') === 'l'
+    const r = e.target.getAttribute('edit-dir') === 'r'
+
+    document.onmousemove = (ev) => {
       if (d) {
-
-        log(resizePoint[i])
-
-        const tr = e.target.getAttribute('edit-dir') === 'tr'
-        const br = e.target.getAttribute('edit-dir') === 'br'
-        const tl = e.target.getAttribute('edit-dir') === 'tl'
-        const bl = e.target.getAttribute('edit-dir') === 'bl'
-        const t = e.target.getAttribute('edit-dir') === 't'
-        const b = e.target.getAttribute('edit-dir') === 'b'
-        const l = e.target.getAttribute('edit-dir') === 'l'
-        const r = e.target.getAttribute('edit-dir') === 'r'
         movePoint.push({
-          x: e.pageX,
-          y: e.pageY
+          x: ev.pageX,
+          y: ev.pageX
         })
 
         if (movePoint.length > 1) {
-          let moveTX = movePoint[movePoint.length - 1].x - movePoint[movePoint.length - 2].x
-          let moveTY = movePoint[movePoint.length - 1].y - movePoint[movePoint.length - 2].y
-          let mouseOffLeft = e.pageX - mainLeft
-          let mouseOffTop = e.pageY - mainTop
+          log(movePoint[movePoint.length - 1].x - movePoint[0].x)
+          let mvWi = movePoint[movePoint.length - 1].x - movePoint[0].x
 
-          if (r) {
-            edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
-          }
-
-          if (l) {
-            edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
-            edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
-          }
-
-          if (t) {
-            edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
-            edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
-          }
-
-          if (b) {
-            edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
-          }
-
-          if (tr) {
-            edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
-            edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
-            edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
-          }
-
-          if (tl) {
-            edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
-            edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
-            edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
-            edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
-          }
-
-          if (br) {
-            edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
-            edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
-          }
-
-          if (bl) {
-            edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
-            edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
-            edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
-          }
+          edit.style.width = parseInt(edit.style.width) + mvWi + 'px'
         }
       }
     }
+
     document.onmouseup = (e) => {
       d = false
-      movePoint = []
-
-      offX = e.offsetX
-      offY = e.offsetY
-
-      edW = parseInt(edit.style.width)
-      edH = parseInt(edit.style.height)
-
-      // moveX = e.pageX - offX - mainLeft
-      // moveY = e.pageY - offY - mainTop
-      // log(moveX)
     }
+
+    // document.onmousemove = (e) => {
+    //   if (d) {
+    //
+    //     log(resizePoint[i])
+    //
+    //     const tr = e.target.getAttribute('edit-dir') === 'tr'
+    //     const br = e.target.getAttribute('edit-dir') === 'br'
+    //     const tl = e.target.getAttribute('edit-dir') === 'tl'
+    //     const bl = e.target.getAttribute('edit-dir') === 'bl'
+    //     const t = e.target.getAttribute('edit-dir') === 't'
+    //     const b = e.target.getAttribute('edit-dir') === 'b'
+    //     const l = e.target.getAttribute('edit-dir') === 'l'
+    //     const r = e.target.getAttribute('edit-dir') === 'r'
+    //     movePoint.push({
+    //       x: e.pageX,
+    //       y: e.pageY
+    //     })
+    //
+    //     if (movePoint.length > 1) {
+    //       let moveTX = movePoint[movePoint.length - 1].x - movePoint[movePoint.length - 2].x
+    //       let moveTY = movePoint[movePoint.length - 1].y - movePoint[movePoint.length - 2].y
+    //       let mouseOffLeft = e.pageX - mainLeft
+    //       let mouseOffTop = e.pageY - mainTop
+    //
+    //       if (r) {
+    //         edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
+    //       }
+    //
+    //       if (l) {
+    //         edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
+    //         edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
+    //       }
+    //
+    //       if (t) {
+    //         edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
+    //         edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
+    //       }
+    //
+    //       if (b) {
+    //         edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
+    //       }
+    //
+    //       if (tr) {
+    //         edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
+    //         edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
+    //         edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
+    //       }
+    //
+    //       if (tl) {
+    //         edit.style.height = (edH - (mouseOffTop - moveY)) + 'px'
+    //         edit.style.transform = 'translate('+ moveX +'px, '+ (e.pageY - mainTop) +'px)'
+    //         edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
+    //         edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
+    //       }
+    //
+    //       if (br) {
+    //         edit.style.width = ((e.pageX - mainLeft) - moveX) + 'px'
+    //         edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
+    //       }
+    //
+    //       if (bl) {
+    //         edit.style.height = ((e.pageY - mainTop) - moveY) + 'px'
+    //         edit.style.width = (edW - (mouseOffLeft - moveX)) + 'px'
+    //         edit.style.transform = 'translate('+ (e.pageX - mainLeft) +'px, '+ moveY +'px)'
+    //       }
+    //     }
+    //   }
+    // }
+    // document.onmouseup = (e) => {
+    //   d = false
+    //   movePoint = []
+    //
+    //   offX = e.offsetX
+    //   offY = e.offsetY
+    //
+    //   edW = parseInt(edit.style.width)
+    //   edH = parseInt(edit.style.height)
+    //
+    //   // moveX = e.pageX - offX - mainLeft
+    //   // moveY = e.pageY - offY - mainTop
+    //   // log(moveX)
+    // }
   }
 }
